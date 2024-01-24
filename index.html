@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Conversion</title>
+</head>
+<body>
+    <div>
+        <label for="ilsAmountInput">Enter Amount (ILS):</label>
+        <input type="number" id="ilsAmountInput" placeholder="Enter ILS amount">
+        <button onclick="convertILStoUSD()">Convert to USD</button>
+    </div>
+
+    <div id="result"></div>
+
+    <label for="ilsAmount">Enter amount in ILS:</label>
+    <input type="number" id="ilsAmount" placeholder="Enter amount" step="0.01">
+
+    <button onclick="convertCurrency()">Convert to jod</button>
+
+    <p id="result"></p>
+
+    <script>
+        async function convertILStoUSD() {
+            const apiKey = 'YOUR_OPEN_EXCHANGE_RATES_API_KEY';
+            
+         
+            const amountInput = document.getElementById('ilsAmountInput');
+            const amount = parseFloat(amountInput.value);
+ 
+             
+
+            try {
+                 
+                const response = await fetch(`https://open.er-api.com/v6/latest/USD?apikey=${apiKey}`);
+                const data = await response.json();
+
+                 const ilsToUsdRate = data.rates.ILS;
+
+                 const usdAmount = amount / ilsToUsdRate;
+
+                 const formattedUsdAmount = usdAmount.toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                });
+
+                 const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `Converted Amount to USD: ${formattedUsdAmount}`;
+            } catch (error) {
+                console.error('Error fetching exchange rates:', error);
+            }
+        }
+        function convertCurrency() {
+             const exchangeRateILS_TO_JOD = 0.276; 
+
+             const ilsAmount = parseFloat(document.getElementById('ilsAmount').value);
+
+              
+
+             const jodAmount = ilsAmount * exchangeRateILS_TO_JOD;
+
+             document.getElementById('result').innerHTML = `${ilsAmount.toFixed(2)} ILS is equal to ${jodAmount.toFixed(2)} JOD`;
+        }
+
+    </script>
+</body>
+</html>
